@@ -16,15 +16,18 @@ def run_identify_language(text: str) -> tuple[Any, float]:
 
 
 def run_mask_emails(text: str) -> tuple[str, int]:
-    raise NotImplementedError
+    from cs336_data.mask_pii import mask_email_addresses
+    return mask_email_addresses(text)
 
 
 def run_mask_phone_numbers(text: str) -> tuple[str, int]:
-    raise NotImplementedError
+    from cs336_data.mask_pii import mask_phone_numbers
+    return mask_phone_numbers(text)
 
 
 def run_mask_ips(text: str) -> tuple[str, int]:
-    raise NotImplementedError
+    from cs336_data.mask_pii import mask_ip_addresses
+    return mask_ip_addresses(text)
 
 
 def run_classify_nsfw(text: str) -> tuple[Any, float]:
