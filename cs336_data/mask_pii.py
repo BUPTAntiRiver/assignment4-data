@@ -21,10 +21,3 @@ def mask_phone_numbers(text: str) -> tuple[str, int]:
 def mask_ip_addresses(text: str) -> tuple[str, int]:
     ip_pattern = r'\b(?:\d{1,3}\.){3}\d{1,3}\b'
     return re.sub(ip_pattern, '|||IP_ADDRESS|||', text), len(re.findall(ip_pattern, text))
-
-
-def mask_pii(text: str) -> str:
-    text, _ = mask_email_addresses(text)
-    text, _ = mask_phone_numbers(text)
-    text, _ = mask_ip_addresses(text)
-    return text
