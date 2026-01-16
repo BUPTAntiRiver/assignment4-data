@@ -1,3 +1,4 @@
+from gopher_quality_filters import gopher_quality_filters
 from language_identification import identify_language
 from mask_pii import mask_email_addresses, mask_ip_addresses, mask_phone_numbers
 from fastwarc.warc import ArchiveIterator, WarcRecordType
@@ -12,15 +13,22 @@ def fused_demo(WARC_FILE: str, WET_FILE: str, count: int):
                 language, _ = identify_language(text)
                 if language != "en":
                     continue
-                masked_text = mask_email_addresses(text)[0]
-                masked_text = mask_phone_numbers(masked_text)[0]
-                masked_text = mask_ip_addresses(masked_text)[0]
-                nsfw_label, nsfw_score = detect_nsfw(masked_text)
-                hatespeech_label, hatespeech_score = detect_hatespeech(masked_text)
+
+                if not gopher_quality_filters(text):
+                    continue
+                
+                nsfw_label, nsfw_score = detect_nsfw(text)
+                hatespeech_label, hatespeech_score = detect_hatespeech(text)
                 print(f"\nNSFW: {nsfw_label} ({nsfw_score:.2%}), Hatespeech: {hatespeech_label} ({hatespeech_score:.2%})")
                 if nsfw_label == "toxic" or hatespeech_label == "toxic":
                     continue
+
+                masked_text = mask_email_addresses(text)[0]
+                masked_text = mask_phone_numbers(masked_text)[0]
+                masked_text = mask_ip_addresses(masked_text)[0]
+
                 print(masked_text[:500])
+
                 count -= 1
                 if count == 0:
                     break
