@@ -41,7 +41,9 @@ def run_classify_toxic_speech(text: str) -> tuple[Any, float]:
 
 
 def run_classify_quality(text: str) -> tuple[Any, float]:
-    raise NotImplementedError
+    from cs336_data.quality_classifier import label_quality
+    return label_quality(text)
+
 
 
 def run_gopher_quality_filter(text: str) -> bool:
@@ -52,7 +54,10 @@ def run_gopher_quality_filter(text: str) -> bool:
 def run_exact_line_deduplication(
     input_files: list[os.PathLike], output_directory: os.PathLike
 ):
-    raise NotImplementedError
+    from cs336_data.exact_deduplication import exact_deduplication
+    input_file_paths = [os.fspath(path) for path in input_files]
+    output_dir_path = os.fspath(output_directory)
+    exact_deduplication(input_file_paths, output_dir_path)
 
 
 def run_minhash_deduplication(
